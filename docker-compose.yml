@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   db:
@@ -12,27 +12,6 @@ services:
       MYSQL_DATABASE: ldap
       MYSQL_USER: dingfu
       MYSQL_PASSWORD: ldap
-
-  ldap-client:
-    image: osixia/phpldapadmin:latest
-    hostname: dingfudata
-    domainname: ldap.dingfudata.com
-    depends_on:
-      - db
-      - ldap
-    links:
-      - db
-      - ldap:ldap.dingfudata.com
-    ports:
-      - 6443:443
-    restart: always
-    environment:
-      LDAP_DB_HOST: db:3306
-      LDAP_DB_PASSWORD: ldap
-      LDAP_DB_USER: dingfu
-      LDAP_DB_NAME: ldap
-      PHPLDAPADMIN_LDAP_HOSTS: ldap.dingfudata.com
-      PHPLDAPADMIN_LDAP_CLIENT_TLS: "false"
 
   ldap:
     depends_on:
@@ -58,7 +37,28 @@ services:
       LDAP_ADMIN_PASSWORD: XXXXXXXX
       LDAP_TLS: "false"
 
-  ldapbackup:
+  ldap-client:
+    image: osixia/phpldapadmin:latest
+    hostname: dingfudata
+    domainname: ldap.dingfudata.com
+    depends_on:
+      - db
+      - ldap
+    links:
+      - db
+      - ldap:ldap.dingfudata.com
+    ports:
+      - 6443:443
+    restart: always
+    environment:
+      LDAP_DB_HOST: db:3306
+      LDAP_DB_PASSWORD: ldap
+      LDAP_DB_USER: dingfu
+      LDAP_DB_NAME: ldap
+      PHPLDAPADMIN_LDAP_HOSTS: ldap.dingfudata.com
+      PHPLDAPADMIN_LDAP_CLIENT_TLS: "false"
+
+  ldap-backup:
     depends_on:
       - db
       - ldap
